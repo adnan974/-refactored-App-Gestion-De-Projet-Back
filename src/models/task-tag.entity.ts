@@ -9,7 +9,7 @@ export class TaskTag{
     @Column()
     tagName:string;
 
-    @Column()
+    @Column({nullable:true})
     backgroudColor:string;
 
     @CreateDateColumn()

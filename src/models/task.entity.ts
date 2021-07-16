@@ -1,4 +1,7 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn,DeleteDateColumn,PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn,DeleteDateColumn,PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinColumn, OneToOne, JoinTable } from 'typeorm';
+import { Project } from './project.entity';
+import { TaskTag } from './task-tag.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Task{
@@ -12,8 +15,15 @@ export class Task{
     @Column()
     title:string;
 
-    @Column()
-    createdBy;
+    @ManyToOne(()=>Project,project=>project.tasks)
+    associatedProject:Project;
+
+    @ManyToMany(()=>TaskTag)
+    @JoinTable()
+    taskTags:TaskTag[];
+
+    @OneToOne(()=>User)
+    createdBy:User;
 
     @CreateDateColumn()
     createdAt:Date;

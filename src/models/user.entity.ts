@@ -17,6 +17,9 @@ export class User {
     @Column()
     address: string;
 
+    @Column({nullable:true})
+    address2:string;
+
     @Column()
     username: string;
 

@@ -1,4 +1,5 @@
-import { Entity, Column,PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column,PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Project } from './project.entity';
 
 @Entity()
 export class ProjectState{
@@ -8,6 +9,9 @@ export class ProjectState{
 
     @Column()
     state:string;
+
+    @OneToMany(()=>Project,project=>project.state)
+    projects:Project[];
 
 
 }

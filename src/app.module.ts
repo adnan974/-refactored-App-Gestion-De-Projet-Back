@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProjectModule } from './module/project/project.module';
-import { UserModule } from './module/user/user.module';
+import { ProjectModule } from './modules/project/project.module';
+import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TaskModule } from './module/task/task.module';
+import { TaskModule } from './modules/task/task.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -22,7 +22,7 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [],
+      entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     TaskModule,
