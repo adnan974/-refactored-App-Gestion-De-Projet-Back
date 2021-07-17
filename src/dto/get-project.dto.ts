@@ -3,7 +3,7 @@ import { ProjectTag } from "src/models/project-tag.entity";
 import { Task } from "src/models/task.entity";
 import { User } from "src/models/user.entity";
 
-export class GetTodoDTO{
+export class GetProjectDTO{
     id:number;
     description:string;
     title:string;
