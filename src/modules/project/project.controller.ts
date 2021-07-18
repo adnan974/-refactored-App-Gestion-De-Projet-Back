@@ -1,7 +1,9 @@
-import { Controller, Delete, Get, Param, Query } from '@nestjs/common';
-import { ApiDefaultResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Query, UseGuards } from '@nestjs/common';
+import { ApiBody, ApiDefaultResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetPaginatedProject } from 'src/dto/get-paginated-project.dto';
 import { GetProjectDTO } from 'src/dto/get-project.dto';
+import { UpdateProjectDTO } from 'src/dto/update-project.dto';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { Project } from 'src/models/project.entity';
 import { ProjectService } from 'src/services/project/project.service';
 
@@ -13,6 +15,7 @@ export class ProjectController {
 
     // TODO Ajout du DTO qui gère la pagination
     @Get()
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({
         summary: 'Get all projets',
     })
@@ -72,6 +75,20 @@ export class ProjectController {
             })
     }
 
+    @Patch()
+    @ApiOperation({
+        description:'Update a project'
+    })
+    //TODO API BOdy ???
+    updateProject(@Body() project:UpdateProjectDTO){
+       return this.projectService.updateProject(project)
+       .then((project)=>{
+           return project;
+       })
+       .catch((err)=>{
+           console.log(err);
+       });
+    }
 
     @Delete(':id')
     @ApiOperation({

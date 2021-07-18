@@ -1,5 +1,6 @@
-import { Controller, Delete, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { UpdateUserDTO } from 'src/dto/update-user.dto';
 import { UserService } from 'src/services/user/user.service';
 
 @Controller('users')
@@ -38,6 +39,21 @@ export class UserController {
         })
     }
 
+    @Patch()
+    @ApiOperation({
+        summary:'Update task'
+    })
+    updateUser(@Body() user:UpdateUserDTO){
+        return this.userService.updateUser(user)
+        .then((user)=>{
+            return user;
+        })
+        .catch((err)=>{
+            console.log(err);
+        });
+
+    }
+
     @Delete('/:id')
     @ApiOperation({
         description:'Delete an user by ts id'
@@ -50,5 +66,6 @@ export class UserController {
     softDeleteUser(@Param('id') id:number){
         this.userService.softDeleteUser(id);
     }
+
 
 }

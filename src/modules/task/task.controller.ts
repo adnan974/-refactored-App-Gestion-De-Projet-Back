@@ -1,5 +1,6 @@
-import { Controller, Delete, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { UpdateTaskDTO } from 'src/dto/update-task.dto';
 import { TaskService } from 'src/services/task/task.service';
 
 @Controller('tasks')
@@ -42,17 +43,33 @@ export class TaskController {
             })
     }
 
+    @Patch()
+    @ApiOperation({
+        description: 'update a task'
+    })
+    updateTask(@Body() task: UpdateTaskDTO) {
+        return this.taskService.UpdateTask(task)
+            .then((task) => {
+                return task;
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    }
+
     @Delete('/:id')
     @ApiOperation({
-        description:'Delete a task by its id'
+        description: 'Delete a task by its id'
     })
     @ApiParam({
-        name:'id',
-        type:Number,
-        required:true
+        name: 'id',
+        type: Number,
+        required: true
     })
-    softDeleteTask(@Param('id')id:number){
-        this.taskService.softDeleteTask(id);    }
+    softDeleteTask(@Param('id') id: number) {
+        this.taskService.softDeleteTask(id);
+    }
 
 
 
