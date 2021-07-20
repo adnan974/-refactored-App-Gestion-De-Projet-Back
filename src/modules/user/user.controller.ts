@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { UpdateUserDTO } from 'src/dto/update-user.dto';
 import { UserService } from 'src/services/user/user.service';
 
@@ -37,6 +38,20 @@ export class UserController {
         .catch((err)=>{
             console.log(err)
         })
+    }
+
+    @Post('/')
+    @ApiOperation({
+        description:'Create an user'
+    })
+    createUser(@Body() user:CreateUserDTO){
+        return this.userService.createUser(user)
+        .then((user)=>{
+            return user;
+        })
+        .catch((err)=>{
+            console.log(err);
+        });
     }
 
     @Patch()

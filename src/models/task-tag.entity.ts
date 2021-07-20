@@ -6,7 +6,7 @@ export class TaskTag{
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column()
+    @Column({nullable:false})
     tagName:string;
 
     @Column({nullable:true})

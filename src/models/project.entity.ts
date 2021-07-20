@@ -13,10 +13,10 @@ export class Project{
     @Column()
     description:string;
 
-    @Column()
+    @Column({nullable:false})
     title:string;
 
-    @ManyToOne(()=>ProjectState,projectState=>projectState.projects)
+    @ManyToOne(()=>ProjectState,projectState=>projectState.projects,{nullable:false})
     state:ProjectState;
 
     users:User[];
@@ -28,7 +28,7 @@ export class Project{
     @JoinTable()
     projectTags:ProjectTag[];
 
-    @OneToOne(()=>User)
+    @ManyToOne(()=>User,user=>user.createdProjects,{nullable:false})
     createdBy:User;
 
     @CreateDateColumn()

@@ -1,5 +1,6 @@
 import { Get, Injectable, Param } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
+import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { UpdateUserDTO } from 'src/dto/update-user.dto';
 import { User } from 'src/models/user.entity';
 import { UserRepostory } from 'src/repositories/user.repository';
@@ -15,6 +16,10 @@ export class UserService {
 
     async getUser(id:number){
         return await this.userRepository.findOne(id);
+    }
+
+    async createUser(user:CreateUserDTO){
+        return await this.userRepository.save(user);
     }
 
     async updateUser(updatedUser:UpdateUserDTO){

@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { CreateTaskDTO } from 'src/dto/create-task.dto';
 import { UpdateTaskDTO } from 'src/dto/update-task.dto';
 import { TaskService } from 'src/services/task/task.service';
 
@@ -41,6 +42,20 @@ export class TaskController {
             .catch((err) => {
                 console.log(err);
             })
+    }
+
+    @Post()
+    @ApiOperation({
+        description:'Create a new task'
+    })
+    createTask(@Body() task:CreateTaskDTO){
+        return this.taskService.createTask(task)
+        .then((task)=>{
+            return task;
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
     }
 
     @Patch()

@@ -6,12 +6,11 @@ export class AuthController {
 
     constructor(private authService:AuthService){}
 
-    // TODO: Validation du mdp de l'utilisateur à ajouter avan tde générer le token 
     @Post('/login')
     login(@Body() user) {
         return this.authService.validateUser(user.username,user.password)
         .then((user)=>{
-            console.log(user);
+            
             // A commenter pour avoir la possiblité de se login avec n'importe quel 
             // username + password
             if(!user){
@@ -22,7 +21,6 @@ export class AuthController {
         })
         .catch((err)=>{
             console.log(err);
-            throw new UnauthorizedException();
         });
     }
 }

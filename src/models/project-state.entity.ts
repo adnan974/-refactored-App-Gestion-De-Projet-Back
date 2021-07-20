@@ -7,7 +7,7 @@ export class ProjectState{
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column()
+    @Column({nullable:false})
     state:string;
 
     @OneToMany(()=>Project,project=>project.state)

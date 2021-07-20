@@ -10,10 +10,10 @@ export class AuthService {
         private jwtService:JwtService
         ){}
 
-    async validateUser(username:string,password:string){
+    async validateUser(username:string,givenPassword:string){
         let user = await this.userService.getUserByUsername(username);
         
-        if(user.password === password){
+        if(user.password === givenPassword){
             return user;
         }
 

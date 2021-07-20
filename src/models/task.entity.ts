@@ -9,20 +9,20 @@ export class Task{
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column()
+    @Column({nullable:true})
     description:string;
 
-    @Column()
+    @Column({nullable:false})
     title:string;
 
-    @ManyToOne(()=>Project,project=>project.tasks)
+    @ManyToOne(()=>Project,project=>project.tasks,{nullable:false})
     associatedProject:Project;
 
     @ManyToMany(()=>TaskTag)
     @JoinTable()
     taskTags:TaskTag[];
 
-    @OneToOne(()=>User)
+    @ManyToOne(()=>User,user=>user.createdTasks,{nullable:false})
     createdBy:User;
 
     @CreateDateColumn()

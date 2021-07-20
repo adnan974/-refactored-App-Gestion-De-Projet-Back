@@ -1,4 +1,5 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn,DeleteDateColumn,PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn,DeleteDateColumn,PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
 export class Gender{
@@ -6,8 +7,10 @@ export class Gender{
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column()
+    @Column({nullable:false})
     gender:string;
 
+    @OneToMany(()=>User,user=>user.gender)
+    users:User[]
 
 }

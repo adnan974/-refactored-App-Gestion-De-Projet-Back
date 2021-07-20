@@ -6,7 +6,7 @@ export class ProjectTag{
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column()
+    @Column({nullable:false})
     tagName:string;
 
     @Column({nullable:true})
