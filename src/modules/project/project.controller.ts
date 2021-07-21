@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, ExecutionContext, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, ExecutionContext, ForbiddenException, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Role } from 'src/constants/role.enum';
 import { Roles, ROLES_KEY } from 'src/decorators/roles.decorator';
@@ -12,15 +12,24 @@ import { ProjectService } from 'src/services/project/project.service';
 
 import { Reflector } from '@nestjs/core';
 import { RolesGuard } from 'src/guards/role.guard';
+import { UserAuthorization } from '../authorization/user-authorization';
+import { ProjectAuthorization } from '../authorization/project-authorization';
+import { IsAdminGuard } from 'src/guards/is-admin.guard';
+import { IsProjectOwnerGuardOrIsAdmin } from 'src/guards/is-project-owner-or-is-admin.guard';
 //import { AuthGuard } from '@nestjs/passport';
 
 // DéCommenter pour activer l'auth par JWT dans toutes les routes du controller
-//@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('projects')
 @ApiTags('projects')
 export class ProjectController {
 
-    constructor(private projectService: ProjectService,private reflector:Reflector) { }
+    constructor(
+        private projectService: ProjectService,
+        private reflector:Reflector,
+        private userAuthorization:UserAuthorization,
+        private projectAuthorization:ProjectAuthorization
+        ) { }
 
     // TODO Ajout du DTO qui gère la pagination
     @Get()
@@ -29,13 +38,13 @@ export class ProjectController {
     // Ici, on crée un décorateur qui aura pour but de dire a quel role à cette 
     // route est accessible. (voir code)
     //@Roles(Role.Admin,Role.User)
-    @UseGuards(JwtAuthGuard,RolesGuard)
+    @UseGuards(JwtAuthGuard,IsAdminGuard)
     @ApiOperation({
         summary: 'Get all projets',
     })
-    getAllProjects(@Query() query):any{
+    async getAllProjects(@Query() query,@Req() req):Promise<any>{
 
-
+        
         let page = query.page || 1;
         let limit = query.limit || 100;
 
@@ -59,6 +68,7 @@ export class ProjectController {
 
     }
 
+    @UseGuards(JwtAuthGuard,IsProjectOwnerGuardOrIsAdmin)
     @Get('/:id')
     @ApiOperation({
         summary: 'Get one projet by its id',
@@ -80,7 +90,17 @@ export class ProjectController {
         type:Number,
         required:false
     })
-    getProject(@Param('id') id: number) {
+    async getProject(@Param('id') id: number,@Req() req) {
+        
+        // let isAdmin:Boolean= await this.userAuthorization.isAdmin(req.user.id).then((res)=>{
+        //     return res;
+        // })
+        // let isProjectOwner:Boolean = await this.projectAuthorization.isProjectOwner(req.user.id,id).then((res)=>{
+        //     return res;
+        // });
+
+        // if(isProjectOwner===false && isAdmin === false) throw new ForbiddenException();
+
         return this.projectService.getProject(id)
             .then((project) => {
                 return project;
