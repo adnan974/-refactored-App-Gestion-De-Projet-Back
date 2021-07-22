@@ -1,9 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateTaskDTO } from 'src/dto/create-task.dto';
 import { UpdateTaskDTO } from 'src/dto/update-task.dto';
+import { IsAdminGuard } from 'src/guards/is-admin.guard';
+import { IsTaskOwnerOrIsAdminGuard } from 'src/guards/is-task-owner-or-is-admin.guard';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { TaskService } from 'src/services/task/task.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('tasks')
 @ApiTags('tasks')
 export class TaskController {
@@ -11,9 +15,10 @@ export class TaskController {
     constructor(private taskService: TaskService) { }
 
     // TODO ajout pagination + DTO
+    @UseGuards(IsAdminGuard)
     @Get()
     @ApiOperation({
-        description: 'Get all tasks'
+        summary: 'Get all tasks'
     })
     getAllTasks() {
         return this.taskService.getAllTasks()
@@ -25,6 +30,7 @@ export class TaskController {
             });
     }
 
+    @UseGuards(IsTaskOwnerOrIsAdminGuard)
     @Get('/:id')
     @ApiOperation({
         summary: 'get one task by its id'
@@ -46,7 +52,7 @@ export class TaskController {
 
     @Post()
     @ApiOperation({
-        description:'Create a new task'
+        summary:'Create a new task'
     })
     createTask(@Body() task:CreateTaskDTO){
         return this.taskService.createTask(task)
@@ -58,9 +64,10 @@ export class TaskController {
         })
     }
 
+    @UseGuards(IsTaskOwnerOrIsAdminGuard)
     @Patch()
     @ApiOperation({
-        description: 'update a task'
+        summary: 'update a task'
     })
     updateTask(@Body() task: UpdateTaskDTO) {
         return this.taskService.UpdateTask(task)
@@ -73,9 +80,11 @@ export class TaskController {
 
     }
 
+    
+    @UseGuards(IsTaskOwnerOrIsAdminGuard)
     @Delete('/:id')
     @ApiOperation({
-        description: 'Delete a task by its id'
+        summary: 'Delete a task by its id'
     })
     @ApiParam({
         name: 'id',

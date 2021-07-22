@@ -38,7 +38,7 @@ export class ProjectController {
     // Ici, on crée un décorateur qui aura pour but de dire a quel role à cette 
     // route est accessible. (voir code)
     //@Roles(Role.Admin,Role.User)
-    @UseGuards(JwtAuthGuard,IsAdminGuard)
+    @UseGuards(IsAdminGuard)
     @ApiOperation({
         summary: 'Get all projets',
     })
@@ -68,8 +68,11 @@ export class ProjectController {
 
     }
 
-    @UseGuards(JwtAuthGuard,IsProjectOwnerGuardOrIsAdmin)
     @Get('/:id')
+    // #Action_Based_Authorization(Systeme perso) 1:
+    // On crée un guard (un middleware) qui va être appélé avant la méthode getProjet()
+    // Voir 2 pour le fonctionnement du guard
+    @UseGuards(IsProjectOwnerGuardOrIsAdmin)
     @ApiOperation({
         summary: 'Get one projet by its id',
     })
@@ -113,7 +116,7 @@ export class ProjectController {
 
     @Post()
     @ApiOperation({
-        description:'Create a new project'
+        summary:'Create a new project'
     })
     createProject(@Body() project:CreateProjectDTO){
         return this.projectService.crateProject(project)
@@ -125,9 +128,11 @@ export class ProjectController {
         });
     }
 
+    
     @Patch()
+    @UseGuards(IsProjectOwnerGuardOrIsAdmin)
     @ApiOperation({
-        description:'Update a project'
+        summary:'Update a project'
     })
     //TODO API BOdy ???
     updateProject(@Body() project:UpdateProjectDTO){
@@ -140,9 +145,10 @@ export class ProjectController {
        });
     }
 
+    @UseGuards(IsProjectOwnerGuardOrIsAdmin)
     @Delete(':id')
     @ApiOperation({
-        description:'Delete project by its id'
+        summary:'Delete project by its id'
     })
     @ApiParam({
         name:'id',

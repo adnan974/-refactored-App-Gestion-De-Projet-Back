@@ -1,15 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { UpdateUserDTO } from 'src/dto/update-user.dto';
+import { IsAdminGuard } from 'src/guards/is-admin.guard';
+import { IsHimselfOrIsAdminGuard } from 'src/guards/is-himself-or-is-admin.guard';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { UserService } from 'src/services/user/user.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 @ApiTags('users')
 export class UserController {
 
     constructor(private userService: UserService) { }
 
+    @UseGuards(IsAdminGuard)
     @Get()
     @ApiOperation({
         summary: 'get all users'
@@ -26,59 +31,65 @@ export class UserController {
 
     }
 
+
+    @UseGuards(IsHimselfOrIsAdminGuard)
     @Get('/:id')
     @ApiOperation({
-        summary:'get one user by its id'
+        summary: 'get one user by its id'
     })
-    getUser(@Param('id')id:number){
+    getUser(@Param('id') id: number) {
         return this.userService.getUser(id)
-        .then((user)=>{
-            return user;
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+            .then((user) => {
+                return user;
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
+
 
     @Post('/')
     @ApiOperation({
-        description:'Create an user'
+        summary: 'Create an user'
     })
-    createUser(@Body() user:CreateUserDTO){
+    createUser(@Body() user: CreateUserDTO) {
         return this.userService.createUser(user)
-        .then((user)=>{
-            return user;
-        })
-        .catch((err)=>{
-            console.log(err);
-        });
+            .then((user) => {
+                return user;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
+
+    @UseGuards(IsHimselfOrIsAdminGuard)
     @Patch()
     @ApiOperation({
-        summary:'Update task'
+        summary: 'Update task'
     })
-    updateUser(@Body() user:UpdateUserDTO){
+    updateUser(@Body() user: UpdateUserDTO) {
         return this.userService.updateUser(user)
-        .then((user)=>{
-            return user;
-        })
-        .catch((err)=>{
-            console.log(err);
-        });
+            .then((user) => {
+                return user;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
 
     }
 
+    @UseGuards(IsAdminGuard)
     @Delete('/:id')
     @ApiOperation({
-        description:'Delete an user by ts id'
+        summary: 'Delete an user by ts id'
     })
     @ApiParam({
-        name:'id',
-        type:Number,
-        required:true
+        name: 'id',
+        type: Number,
+        required: true
     })
-    softDeleteUser(@Param('id') id:number){
+    softDeleteUser(@Param('id') id: number) {
         this.userService.softDeleteUser(id);
     }
 

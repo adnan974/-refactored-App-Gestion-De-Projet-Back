@@ -6,12 +6,25 @@ import { UserRepostory } from "src/repositories/user.repository";
 @Injectable()
 export class UserAuthorization {
 
-    constructor(private userRepository:UserRepostory){}
+    constructor(private userRepository: UserRepostory) { }
 
-    async isAdmin(userId:number):Promise<boolean>{
-        let user:User = await this.userRepository.findOne({where:{id:userId},relations:['role']});
+    async isAdmin(userId: number): Promise<boolean> {
+        let user: User = await this.userRepository.findOne({ where: { id: userId }, relations: ['role'] });
 
-        if(user.role.id === Role.Admin) return true;
+        if (user.role.id === Role.Admin) return true;
         return false;
     }
+
+    async isHimself(userId: number, userResquestId: number): Promise<boolean> {
+
+        let user = await this.userRepository.findOne(userId);
+        
+        if (userResquestId == user.id) {
+            return true;
+        }
+        return false;
+    }
+
+
+
 }
