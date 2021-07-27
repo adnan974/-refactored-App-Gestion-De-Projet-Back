@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, ExecutionContext, ForbiddenException, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { BadRequestException, Body, Controller, Delete, ExecutionContext, ForbiddenException, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Role } from 'src/constants/role.enum';
 import { Roles, ROLES_KEY } from 'src/decorators/roles.decorator';
 import { CreateProjectDTO } from 'src/dto/create-project.dto';
@@ -18,9 +18,10 @@ import { IsAdminGuard } from 'src/guards/is-admin.guard';
 import { IsProjectOwnerGuardOrIsAdmin } from 'src/guards/is-project-owner-or-is-admin.guard';
 //import { AuthGuard } from '@nestjs/passport';
 
-// DéCommenter pour activer l'auth par JWT dans toutes les routes du controller
+// commenter pour désactiver l'auth par JWT dans toutes les routes du controller
 @UseGuards(JwtAuthGuard)
 @Controller('projects')
+@ApiBearerAuth()
 @ApiTags('projects')
 export class ProjectController {
 
@@ -42,7 +43,7 @@ export class ProjectController {
     @ApiOperation({
         summary: 'Get all projets',
     })
-    async getAllProjects(@Query() query,@Req() req):Promise<any>{
+    async getAllProjects(@Query() query):Promise<any>{
 
         
         let page = query.page || 1;
@@ -59,7 +60,8 @@ export class ProjectController {
                 return projects
             })
             .catch((err) => {
-                console.log(err)
+                console.log(err);
+                throw new BadRequestException();
             });
         
         
@@ -93,7 +95,7 @@ export class ProjectController {
         type:Number,
         required:false
     })
-    async getProject(@Param('id') id: number,@Req() req) {
+    async getProject(@Param('id') id: number) {
         
         // let isAdmin:Boolean= await this.userAuthorization.isAdmin(req.user.id).then((res)=>{
         //     return res;
@@ -110,6 +112,7 @@ export class ProjectController {
             })
             .catch((err) => {
                 console.log(err);
+                throw new BadRequestException();
             })
     }
 
@@ -142,6 +145,7 @@ export class ProjectController {
        })
        .catch((err)=>{
            console.log(err);
+           throw new BadRequestException();
        });
     }
 
@@ -156,7 +160,11 @@ export class ProjectController {
         required:true
     })
     softDeleteProject(@Param('id') id:number){
-        return this.projectService.softDeleteProject(id);
+        return this.projectService.softDeleteProject(id)
+        .catch((err)=>{
+            console.log(err);
+            throw new BadRequestException();
+        });
     }
 
 

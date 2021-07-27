@@ -28,13 +28,16 @@ export class User {
     @Column({nullable:true})
     address2:string;
 
-    @Column({nullable:false})
+    @Column({
+        nullable:false,
+        unique:true
+    })
     username: string;
 
     @Column({nullable:false})
     password: string;
 
-    @ManyToMany(() => User)
+    @ManyToMany(() => Project)
     @JoinTable()
     projects: Project[];
 

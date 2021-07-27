@@ -4,6 +4,7 @@ import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { UpdateUserDTO } from 'src/dto/update-user.dto';
 import { User } from 'src/models/user.entity';
 import { UserRepostory } from 'src/repositories/user.repository';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -19,7 +20,12 @@ export class UserService {
     }
 
     async createUser(user:CreateUserDTO){
-        //TODO a crypter
+
+        const salt = await bcrypt.genSalt();
+        const hash = await bcrypt.hash(user.password, salt);
+
+        user.password = hash;
+        
         return await this.userRepository.save(user);
     }
 

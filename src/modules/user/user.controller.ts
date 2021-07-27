@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { UpdateUserDTO } from 'src/dto/update-user.dto';
 import { IsAdminGuard } from 'src/guards/is-admin.guard';
@@ -7,33 +7,35 @@ import { IsHimselfOrIsAdminGuard } from 'src/guards/is-himself-or-is-admin.guard
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { UserService } from 'src/services/user/user.service';
 
-@UseGuards(JwtAuthGuard)
+
 @Controller('users')
 @ApiTags('users')
 export class UserController {
 
     constructor(private userService: UserService) { }
 
-    @UseGuards(IsAdminGuard)
+    @UseGuards(JwtAuthGuard,IsAdminGuard)
     @Get()
+    @ApiBearerAuth()
     @ApiOperation({
         summary: 'get all users'
     })
     getUsers() {
         return this.userService.getAllUsers()
             .then((users) => {
-                console.log(users);
                 return users;
             })
             .catch((err) => {
-                console.log(err);
+                console.log(err)
+                throw new BadRequestException();
             });
 
     }
 
 
-    @UseGuards(IsHimselfOrIsAdminGuard)
+    @UseGuards(JwtAuthGuard,IsHimselfOrIsAdminGuard)
     @Get('/:id')
+    @ApiBearerAuth()
     @ApiOperation({
         summary: 'get one user by its id'
     })
@@ -44,6 +46,7 @@ export class UserController {
             })
             .catch((err) => {
                 console.log(err)
+                throw new BadRequestException();
             })
     }
 
@@ -59,12 +62,14 @@ export class UserController {
             })
             .catch((err) => {
                 console.log(err);
+                throw new BadRequestException();
             });
     }
 
 
-    @UseGuards(IsHimselfOrIsAdminGuard)
+    @UseGuards(JwtAuthGuard,IsHimselfOrIsAdminGuard)
     @Patch()
+    @ApiBearerAuth()
     @ApiOperation({
         summary: 'Update task'
     })
@@ -75,12 +80,14 @@ export class UserController {
             })
             .catch((err) => {
                 console.log(err);
+                throw new BadRequestException();
             });
 
     }
 
-    @UseGuards(IsAdminGuard)
+    @UseGuards(JwtAuthGuard,IsAdminGuard)
     @Delete('/:id')
+    @ApiBearerAuth()
     @ApiOperation({
         summary: 'Delete an user by ts id'
     })
@@ -90,7 +97,11 @@ export class UserController {
         required: true
     })
     softDeleteUser(@Param('id') id: number) {
-        this.userService.softDeleteUser(id);
+        this.userService.softDeleteUser(id)
+            .catch((err) => {
+                console.log(err);
+                throw new BadRequestException();
+            });
     }
 
 

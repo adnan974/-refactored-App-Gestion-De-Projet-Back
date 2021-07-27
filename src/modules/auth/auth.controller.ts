@@ -1,4 +1,7 @@
-import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Body, Controller, NotFoundException, Post, UnauthorizedException } from '@nestjs/common';
+import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { LoginDTO } from 'src/dto/login.dto';
+import { User } from 'src/models/user.entity';
 import { AuthService } from 'src/services/auth/auth.service';
 
 @Controller('/auth')
@@ -7,7 +10,11 @@ export class AuthController {
     constructor(private authService:AuthService){}
 
     @Post('/login')
-    login(@Body() user) {
+    @ApiOperation({
+        summary:"Login and get a jwt token"
+    })
+    login(@Body() user:LoginDTO) {
+        
         return this.authService.validateUser(user.username,user.password)
         .then((user)=>{
             
@@ -21,6 +28,7 @@ export class AuthController {
         })
         .catch((err)=>{
             console.log(err);
+            throw new BadRequestException();
         });
     }
 }

@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskModule } from './modules/task/task.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
+import { ProjectTagModule } from './modules/project-tag/project-tag.module';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { AuthModule } from './modules/auth/auth.module';
       synchronize: true,
     }),
     TaskModule,
-    AuthModule
+    AuthModule,
+    ProjectTagModule
     
   ],
   controllers: [AppController],

@@ -8,7 +8,6 @@ export class GetProjectDTO{
     description:string;
     title:string;
     state:ProjectState;
-    users:User[];
     tasks:Task[];
     projectTags:ProjectTag[];
     createdBy:User;

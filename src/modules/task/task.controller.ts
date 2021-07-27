@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateTaskDTO } from 'src/dto/create-task.dto';
 import { UpdateTaskDTO } from 'src/dto/update-task.dto';
 import { IsAdminGuard } from 'src/guards/is-admin.guard';
@@ -9,6 +9,7 @@ import { TaskService } from 'src/services/task/task.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('tasks')
+@ApiBearerAuth()
 @ApiTags('tasks')
 export class TaskController {
 
@@ -17,6 +18,7 @@ export class TaskController {
     // TODO ajout pagination + DTO
     @UseGuards(IsAdminGuard)
     @Get()
+    
     @ApiOperation({
         summary: 'Get all tasks'
     })
@@ -27,11 +29,13 @@ export class TaskController {
             })
             .catch((err) => {
                 console.log(err);
+                throw new BadRequestException();
             });
     }
 
     @UseGuards(IsTaskOwnerOrIsAdminGuard)
     @Get('/:id')
+    
     @ApiOperation({
         summary: 'get one task by its id'
     })
@@ -47,6 +51,7 @@ export class TaskController {
             })
             .catch((err) => {
                 console.log(err);
+                throw new BadRequestException();
             })
     }
 
@@ -61,6 +66,7 @@ export class TaskController {
         })
         .catch((err)=>{
             console.log(err);
+            throw new BadRequestException();
         })
     }
 
@@ -76,6 +82,7 @@ export class TaskController {
             })
             .catch((err) => {
                 console.log(err);
+                throw new BadRequestException();
             })
 
     }
@@ -92,7 +99,11 @@ export class TaskController {
         required: true
     })
     softDeleteTask(@Param('id') id: number) {
-        this.taskService.softDeleteTask(id);
+        this.taskService.softDeleteTask(id)
+        .catch((err)=>{
+            console.log(err);
+            throw new BadRequestException();
+        });
     }
 
 

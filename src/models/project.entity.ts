@@ -19,8 +19,7 @@ export class Project{
     @ManyToOne(()=>ProjectState,projectState=>projectState.projects,{nullable:false})
     state:ProjectState;
 
-    users:User[];
-
+    
     @OneToMany(()=>Task,task=>task.associatedProject)
     tasks:Task[];
 

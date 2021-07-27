@@ -5,10 +5,13 @@ import { UserRepostory } from 'src/repositories/user.repository';
 import { ProjectService } from 'src/services/project/project.service';
 import { AuthorizationModule } from '../authorization/authorization.module';
 import { ProjectController } from './project.controller';
+import { ProjectTagController } from './project-tag/project-tag.controller';
+import { ProjectTagRepository } from 'src/repositories/project-tag.repository';
+import { ProjectTagService } from 'src/services/project-tags/project-tag.service';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([ProjectRepository,UserRepostory]),AuthorizationModule],
-  controllers: [ProjectController],
-  providers:[ProjectService]
+  imports:[TypeOrmModule.forFeature([ProjectRepository,UserRepostory,ProjectTagRepository]),AuthorizationModule],
+  controllers: [ProjectController,ProjectTagController],
+  providers:[ProjectService,ProjectTagService]
 })
 export class ProjectModule {}
