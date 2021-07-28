@@ -42,7 +42,7 @@ export class ProjectTagService {
     }
 
 
-    async updateProjectTagOfAProject(updatedProjectTag:UpdateProjectTagDTO){
+    async updateProjectTag(updatedProjectTag:UpdateProjectTagDTO){
         
         let originalProjectTag:ProjectTag = await this.projectTagRepository.findOne(updatedProjectTag.id);
 
@@ -52,7 +52,7 @@ export class ProjectTagService {
     }
 
     
-    async deleteProjectTagOfAProject(tagId){
+    async deleteProjectTag(tagId){
         return await this.projectTagRepository.delete(tagId);
 
     }

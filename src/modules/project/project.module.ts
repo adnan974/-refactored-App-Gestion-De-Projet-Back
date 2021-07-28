@@ -7,7 +7,7 @@ import { AuthorizationModule } from '../authorization/authorization.module';
 import { ProjectController } from './project.controller';
 import { ProjectTagController } from './project-tag/project-tag.controller';
 import { ProjectTagRepository } from 'src/repositories/project-tag.repository';
-import { ProjectTagService } from 'src/services/project-tags/project-tag.service';
+import { ProjectTagService } from 'src/services/project-tag/project-tag.service';
 
 @Module({
   imports:[TypeOrmModule.forFeature([ProjectRepository,UserRepostory,ProjectTagRepository]),AuthorizationModule],

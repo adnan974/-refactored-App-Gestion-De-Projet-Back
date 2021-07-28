@@ -1,21 +1,26 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateProjectTagDTO } from 'src/dto/create-project-tag.dto';
 import { UpdateProjectTagDTO } from 'src/dto/update-project-tag.dto';
-import { ProjectTagService } from 'src/services/project-tags/project-tag.service';
+import { IsAdminGuard } from 'src/guards/is-admin.guard';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { ProjectTagService } from 'src/services/project-tag/project-tag.service';
 
-
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @Controller('project-tags')
 @ApiTags('project-tags')
 export class ProjectTagController {
 
     constructor(private projectTagService: ProjectTagService) { }
 
+
     @ApiOperation({
         summary: 'get all project tags'
     })
+    @UseGuards(IsAdminGuard)
     @Get()
-    getAllProjctTags(){
+    getAllProjectTags(){
         return this.projectTagService.getAllProjectTags();
     }
 
@@ -23,17 +28,19 @@ export class ProjectTagController {
     @ApiOperation({
         summary: 'create a project tag'
     })
+    @UseGuards(IsAdminGuard)
     @Post()
-    createProjctTag(@Body() projectTag:CreateProjectTagDTO){
+    createProjectTag(@Body() projectTag:CreateProjectTagDTO){
         return this.projectTagService.createProjectTag(projectTag);
     }
     
     @ApiOperation({
         summary: 'update a project tag'
     })
+    @UseGuards(IsAdminGuard)
     @Patch()
-    updateProjectTagOfAProject(@Body() updatedTag: UpdateProjectTagDTO) {
-        return this.projectTagService.updateProjectTagOfAProject(updatedTag)
+    updateProjectTag(@Body() updatedTag: UpdateProjectTagDTO) {
+        return this.projectTagService.updateProjectTag(updatedTag)
             .then((tag) => {
                 return tag;
             })
@@ -47,9 +54,10 @@ export class ProjectTagController {
     @ApiOperation({
         summary: '(hard) delete a project tag'
     })
+    @UseGuards(IsAdminGuard)
     @Delete('/:id')
-    deleteProjectTagOfAProject(@Param('id') tagId: number) {
-        this.projectTagService.deleteProjectTagOfAProject(tagId)
+    deleteProjectTag(@Param('id') tagId: number) {
+        this.projectTagService.deleteProjectTag(tagId)
         .catch((err) => {
             console.log(err);
             throw new BadRequestException();

@@ -8,6 +8,7 @@ import { TaskModule } from './modules/task/task.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProjectTagModule } from './modules/project-tag/project-tag.module';
+import { TaskTagModule } from './modules/task-tag/task-tag.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { ProjectTagModule } from './modules/project-tag/project-tag.module';
     }),
     TaskModule,
     AuthModule,
-    ProjectTagModule
+    ProjectTagModule,
+    TaskTagModule
     
   ],
   controllers: [AppController],
