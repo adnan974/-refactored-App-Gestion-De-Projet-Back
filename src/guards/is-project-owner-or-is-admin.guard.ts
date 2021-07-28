@@ -41,7 +41,7 @@ export class IsProjectOwnerGuardOrIsAdmin extends IsAdminGuard implements CanAct
       })
       .catch((err) => {
         console.log(err);
-        throw new NotFoundException();
+        throw new BadRequestException();
       });
 
     let isProjectOwner: boolean = await this.projectAuthorization.isProjectOwner(user.id, projectId)
@@ -50,7 +50,7 @@ export class IsProjectOwnerGuardOrIsAdmin extends IsAdminGuard implements CanAct
       })
       .catch((err) => {
         console.log(err);
-        throw new NotFoundException();
+        throw new BadRequestException();
       });
 
 

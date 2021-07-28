@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateTaskDTO } from 'src/dto/create-task.dto';
 import { UpdateTaskDTO } from 'src/dto/update-task.dto';
@@ -44,7 +44,7 @@ export class TaskController {
         type: Number,
         required: true
     })
-    getTask(@Param('id') id: number) {
+    getTask(@Param('id',ParseIntPipe) id: number) {
         return this.taskService.getTask(id)
             .then((task) => {
                 return task;
@@ -98,7 +98,7 @@ export class TaskController {
         type: Number,
         required: true
     })
-    softDeleteTask(@Param('id') id: number) {
+    softDeleteTask(@Param('id',ParseIntPipe) id: number) {
         this.taskService.softDeleteTask(id)
         .catch((err)=>{
             console.log(err);

@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateTaskTagDTO } from 'src/dto/create-task-tag.dto';
 import { UpdateTaskTagDTO } from 'src/dto/update-task-tag.dto';
@@ -53,7 +53,7 @@ export class TaskTagController {
     })
     @UseGuards(IsAdminGuard)
     @Delete('/:id')
-    deleteTaskTag(@Param('id') tagId: number) {
+    deleteTaskTag(@Param('id',ParseIntPipe) tagId: number) {
         this.taskTagService.deleteTaskTag(tagId)
             .catch((err) => {
                 console.log(err);

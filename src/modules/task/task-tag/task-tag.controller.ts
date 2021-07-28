@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IsAdminGuard } from 'src/guards/is-admin.guard';
 import { IsTaskOwnerOrIsAdminGuard } from 'src/guards/is-task-owner-or-is-admin.guard';
@@ -20,7 +20,7 @@ export class TaskTagController {
     })
     @UseGuards(IsTaskOwnerOrIsAdminGuard)
     @Get()
-    getTaskTagsOfATask(@Param('id') taskId: number) {
+    getTaskTagsOfATask(@Param('id',ParseIntPipe) taskId: number) {
         return this.taskTagService.getTaskTagsOfATask(taskId)
             .then((taskTags) => {
                 return taskTags;
@@ -36,7 +36,7 @@ export class TaskTagController {
     })
     @UseGuards(IsTaskOwnerOrIsAdminGuard)
     @Post()
-    createTaskTagOfATask(@Param('id') taskId: number, @Body() tag: TaskTag) {
+    createTaskTagOfATask(@Param('id',ParseIntPipe) taskId: number, @Body() tag: TaskTag) {
         return this.taskTagService.addTaskTagToATask(taskId, tag)
             .then((task) => {
                 return task;

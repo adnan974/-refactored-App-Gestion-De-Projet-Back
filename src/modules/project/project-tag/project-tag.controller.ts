@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateProjectTagDTO } from 'src/dto/create-project-tag.dto';
 import { UpdateProjectTagDTO } from 'src/dto/update-project-tag.dto';
@@ -20,7 +20,7 @@ export class ProjectTagController {
     })
     @UseGuards(IsProjectOwnerGuardOrIsAdmin)
     @Get()
-    getProjectTagsOfAProject(@Param('id') projectId: number) {
+    getProjectTagsOfAProject(@Param('id',ParseIntPipe) projectId: number) {
         return this.projectTagService.getProjectTagsOfAProject(projectId)
             .then((projectTags) => {
                 return projectTags;
@@ -31,12 +31,15 @@ export class ProjectTagController {
             });
     }
 
+
+    // Cette api associe seulement un tag existant à un projet. 
+    // TODO Si le tag n'existe pas, je devrai le créer
     @ApiOperation({
         summary: 'add tag to a project'
     })
     @UseGuards(IsProjectOwnerGuardOrIsAdmin)
     @Post()
-    createProjectTagOfAProject(@Param('id') projectId: number, @Body() tag: ProjectTag) {
+    createProjectTagOfAProject(@Param('id',ParseIntPipe) projectId: number, @Body() tag: ProjectTag) {
         return this.projectTagService.addProjectTagToAProject(projectId, tag)
             .then((project) => {
                 return project

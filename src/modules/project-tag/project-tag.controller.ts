@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateProjectTagDTO } from 'src/dto/create-project-tag.dto';
 import { UpdateProjectTagDTO } from 'src/dto/update-project-tag.dto';
@@ -56,7 +56,7 @@ export class ProjectTagController {
     })
     @UseGuards(IsAdminGuard)
     @Delete('/:id')
-    deleteProjectTag(@Param('id') tagId: number) {
+    deleteProjectTag(@Param('id',ParseIntPipe) tagId: number) {
         this.projectTagService.deleteProjectTag(tagId)
         .catch((err) => {
             console.log(err);

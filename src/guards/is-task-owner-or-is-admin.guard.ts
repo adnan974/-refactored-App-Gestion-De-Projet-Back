@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, CanActivate, ExecutionContext, Injectable, NotFoundException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { TaskAuthorization } from 'src/modules/authorization/task-authorization';
 import { UserAuthorization } from 'src/modules/authorization/user-authorization';
@@ -33,7 +33,7 @@ export class IsTaskOwnerOrIsAdminGuard extends IsAdminGuard implements CanActiva
       })
       .catch((err) => {
         console.log(err);
-        throw new NotFoundException();
+        throw new BadRequestException();
       });
 
     let taskOwner: boolean = await this.taskAuthorization.isTaskOwner(user.id, taskId)
@@ -42,7 +42,7 @@ export class IsTaskOwnerOrIsAdminGuard extends IsAdminGuard implements CanActiva
       })
       .catch((err) => {
         console.log(err);
-        throw new NotFoundException();
+        throw new BadRequestException();
       });
 
 

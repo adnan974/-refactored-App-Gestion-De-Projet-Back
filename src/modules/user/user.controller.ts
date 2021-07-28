@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { UpdateUserDTO } from 'src/dto/update-user.dto';
@@ -39,7 +39,7 @@ export class UserController {
     @ApiOperation({
         summary: 'get one user by its id'
     })
-    getUser(@Param('id') id: number) {
+    getUser(@Param('id',ParseIntPipe) id: number) {
         return this.userService.getUser(id)
             .then((user) => {
                 return user;
@@ -96,7 +96,7 @@ export class UserController {
         type: Number,
         required: true
     })
-    softDeleteUser(@Param('id') id: number) {
+    softDeleteUser(@Param('id',ParseIntPipe) id: number) {
         this.userService.softDeleteUser(id)
             .catch((err) => {
                 console.log(err);

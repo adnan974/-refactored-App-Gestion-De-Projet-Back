@@ -12,7 +12,7 @@ import { AuthController } from './auth.controller';
     // TODO mettre le secret dans un endroit sécurité. La doc de nest parle d'utiliser
     // un secret vault (Se renseigner), ou une variable d'environnement
     secret: jwtConstants.secret,
-    signOptions: { expiresIn: '60s' },
+    signOptions: { expiresIn: '1h' },
   }),],
   controllers: [AuthController],
   providers: [AuthService,JwtStrategy]
