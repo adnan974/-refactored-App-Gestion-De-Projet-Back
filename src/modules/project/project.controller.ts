@@ -27,9 +27,6 @@ export class ProjectController {
 
     constructor(
         private projectService: ProjectService,
-        private reflector:Reflector,
-        private userAuthorization:UserAuthorization,
-        private projectAuthorization:ProjectAuthorization
         ) { }
 
     // TODO Ajout du DTO qui gère la pagination
@@ -97,17 +94,7 @@ export class ProjectController {
     })
     async getProject(@Param('id',ParseIntPipe) id: number) {
 
-        console.log("get project");
         
-        // let isAdmin:Boolean= await this.userAuthorization.isAdmin(req.user.id).then((res)=>{
-        //     return res;
-        // })
-        // let isProjectOwner:Boolean = await this.projectAuthorization.isProjectOwner(req.user.id,id).then((res)=>{
-        //     return res;
-        // });
-
-        // if(isProjectOwner===false && isAdmin === false) throw new ForbiddenException();
-
         return this.projectService.getProject(id)
             .then((project) => {
                 return project;
