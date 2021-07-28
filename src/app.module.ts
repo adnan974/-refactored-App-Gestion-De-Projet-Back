@@ -27,7 +27,12 @@ import { TaskTagModule } from './modules/task-tag/task-tag.module';
       database: process.env.DB_NAME,
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
-      ssl:true
+      ssl:true,
+      extra: {
+        ssl: {
+          rejectUnauthorized: false
+        },
+      },
     }),
     TaskModule,
     AuthModule,
