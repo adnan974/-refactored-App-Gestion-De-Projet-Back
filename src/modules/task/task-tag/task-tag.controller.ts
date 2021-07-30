@@ -6,7 +6,7 @@ import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { TaskTag } from 'src/models/task-tag.entity';
 import { TaskTagService } from 'src/services/task-tag/task-tag.service';
 
-@Controller('task/:id/task-tag')
+@Controller('task/:id/task-tags')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 @ApiTags('tasks')
