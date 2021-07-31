@@ -16,6 +16,7 @@ import { UserAuthorization } from '../authorization/user-authorization';
 import { ProjectAuthorization } from '../authorization/project-authorization';
 import { IsAdminGuard } from 'src/guards/is-admin.guard';
 import { IsProjectOwnerGuardOrIsAdmin } from 'src/guards/is-project-owner-or-is-admin.guard';
+import { paginatedParams } from 'src/decorators/getPaginationParams.decorator';
 //import { AuthGuard } from '@nestjs/passport';
 
 // commenter pour désactiver l'auth par JWT dans toutes les routes du controller
@@ -40,19 +41,14 @@ export class ProjectController {
     @ApiOperation({
         summary: 'Get all projets',
     })
-    async getAllProjects(@Query() query):Promise<any>{
-
-        
-        let page = query.page || 1;
-        let limit = query.limit || 100;
+    @ApiQuery({name:'page',required:false})
+    @ApiQuery({name:'limit',required:false})
+    async getAllProjects(@paginatedParams() paginatedParams):Promise<any>{
 
         let projectData = this.projectService.getAllProjects()
             .then((projects) => {
 
-                let firstIndex = (page * limit) - limit;
-                let lastIndex = (page * limit);
-
-                projects = projects.slice(firstIndex, lastIndex);
+                projects = projects.slice(paginatedParams.firstIndex, paginatedParams.lastIndex);
 
                 return projects
             })
