@@ -42,9 +42,9 @@ export class ProjectTagService {
     }
 
 
-    async updateProjectTag(updatedProjectTag:UpdateProjectTagDTO){
+    async updateProjectTag(id:number,updatedProjectTag:UpdateProjectTagDTO){
         
-        let originalProjectTag:ProjectTag = await this.projectTagRepository.findOne(updatedProjectTag.id);
+        let originalProjectTag:ProjectTag = await this.projectTagRepository.findOne(id);
 
         updatedProjectTag = {...originalProjectTag,...updatedProjectTag}
 

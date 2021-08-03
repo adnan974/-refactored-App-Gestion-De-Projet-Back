@@ -38,9 +38,9 @@ export class ProjectTagController {
         summary: 'update a project tag'
     })
     @UseGuards(IsAdminGuard)
-    @Patch()
-    updateProjectTag(@Body() updatedTag: UpdateProjectTagDTO) {
-        return this.projectTagService.updateProjectTag(updatedTag)
+    @Patch('/:id')
+    updateProjectTag(@Body() updatedTag: UpdateProjectTagDTO,@Param('id',ParseIntPipe) projectTagId:number) {
+        return this.projectTagService.updateProjectTag(projectTagId,updatedTag)
             .then((tag) => {
                 return tag;
             })

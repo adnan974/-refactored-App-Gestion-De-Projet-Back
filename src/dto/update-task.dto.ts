@@ -7,6 +7,7 @@ import { User } from "src/models/user.entity";
 export class UpdateTaskDTO{
 
     @ApiProperty()
+    @IsNotEmpty()
     id:number;
 
     @ApiProperty()

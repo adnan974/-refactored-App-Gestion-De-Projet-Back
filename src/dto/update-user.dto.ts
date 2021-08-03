@@ -9,6 +9,7 @@ import { Task } from "src/models/task.entity";
 export class UpdateUserDTO {
 
     @ApiProperty({ type: Number })
+    @IsNotEmpty()
     id: number;
 
     @ApiProperty({ default: { id: 1 }, type: Gender })

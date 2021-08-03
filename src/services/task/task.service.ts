@@ -22,8 +22,8 @@ export class TaskService {
         return await this.taskRepository.save(task);
     }
 
-    async UpdateTask(updatedTask:UpdateTaskDTO){
-        let originalTask:Task = await this.taskRepository.findOne(updatedTask.id);
+    async UpdateTask(id:number,updatedTask:UpdateTaskDTO){
+        let originalTask:Task = await this.taskRepository.findOne(id);
 
         let taskToInsert: Task = { ...originalTask, ...updatedTask };
         return await this.taskRepository.save(taskToInsert);

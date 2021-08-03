@@ -41,9 +41,9 @@ export class TaskTagService {
     }
 
 
-    async updateTaskTag(updatedTaskTag:UpdateTaskTagDTO){
+    async updateTaskTag(id:number,updatedTaskTag:UpdateTaskTagDTO){
         
-        let originalTaskTag:TaskTag = await this.taskTagRepository.findOne(updatedTaskTag.id);
+        let originalTaskTag:TaskTag = await this.taskTagRepository.findOne(id);
 
         updatedTaskTag = {...originalTaskTag,...updatedTaskTag}
 

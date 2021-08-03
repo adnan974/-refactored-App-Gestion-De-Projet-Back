@@ -1,19 +1,9 @@
 import { BadRequestException, Body, Controller, Delete, ExecutionContext, ForbiddenException, Get, Param, ParseIntPipe, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Role } from 'src/constants/role.enum';
-import { Roles, ROLES_KEY } from 'src/decorators/roles.decorator';
 import { CreateProjectDTO } from 'src/dto/create-project.dto';
-import { GetPaginatedProject } from 'src/dto/get-paginated-project.dto';
-import { GetProjectDTO } from 'src/dto/get-project.dto';
 import { UpdateProjectDTO } from 'src/dto/update-project.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
-import { Project } from 'src/models/project.entity';
 import { ProjectService } from 'src/services/project/project.service';
-
-import { Reflector } from '@nestjs/core';
-import { RolesGuard } from 'src/guards/role.guard';
-import { UserAuthorization } from '../authorization/user-authorization';
-import { ProjectAuthorization } from '../authorization/project-authorization';
 import { IsAdminGuard } from 'src/guards/is-admin.guard';
 import { IsProjectOwnerGuardOrIsAdmin } from 'src/guards/is-project-owner-or-is-admin.guard';
 import { paginatedParams } from 'src/decorators/getPaginationParams.decorator';
@@ -43,7 +33,7 @@ export class ProjectController {
     })
     @ApiQuery({name:'page',required:false})
     @ApiQuery({name:'limit',required:false})
-    async getAllProjects(@paginatedParams() paginatedParams):Promise<any>{
+    getAllProjects(@paginatedParams() paginatedParams){
 
         let projectData = this.projectService.getAllProjects()
             .then((projects) => {
@@ -88,7 +78,7 @@ export class ProjectController {
         type:Number,
         required:false
     })
-    async getProject(@Param('id',ParseIntPipe) id: number) {
+    getProject(@Param('id',ParseIntPipe) id: number) {
 
         
         return this.projectService.getProject(id)
@@ -118,14 +108,14 @@ export class ProjectController {
     }
 
     
-    @Patch()
+    @Patch('/:id')
     @UseGuards(IsProjectOwnerGuardOrIsAdmin)
     @ApiOperation({
         summary:'Update a project'
     })
     //TODO API BOdy ???
-    updateProject(@Body() project:UpdateProjectDTO){
-       return this.projectService.updateProject(project)
+    updateProject(@Body() updatedProject:UpdateProjectDTO,@Param('id',ParseIntPipe) projectId:number){
+       return this.projectService.updateProject(projectId,updatedProject)
        .then((project)=>{
            return project;
        })

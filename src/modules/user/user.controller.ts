@@ -68,13 +68,13 @@ export class UserController {
 
 
     @UseGuards(JwtAuthGuard,IsHimselfOrIsAdminGuard)
-    @Patch()
+    @Patch('/:id')
     @ApiBearerAuth()
     @ApiOperation({
         summary: 'Update task'
     })
-    updateUser(@Body() user: UpdateUserDTO) {
-        return this.userService.updateUser(user)
+    updateUser(@Body() user: UpdateUserDTO,@Param('id') userId:number) {
+        return this.userService.updateUser(userId,user)
             .then((user) => {
                 return user;
             })

@@ -4,6 +4,7 @@ import { IsNotEmpty } from "class-validator";
 export class UpdateTaskTagDTO{
 
     @ApiProperty()
+    @IsNotEmpty()
     id:number;
 
     @ApiProperty()

@@ -29,9 +29,9 @@ export class UserService {
         return await this.userRepository.save(user);
     }
 
-    async updateUser(updatedUser:UpdateUserDTO){
+    async updateUser(id:number,updatedUser:UpdateUserDTO){
 
-        let originalUser:User = await this.userRepository.findOne(updatedUser.id);
+        let originalUser:User = await this.userRepository.findOne(id);
         let userToInsert:User = {...originalUser,...updatedUser};
         return await this.userRepository.save(userToInsert);
 

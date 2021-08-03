@@ -71,12 +71,12 @@ export class TaskController {
     }
 
     @UseGuards(IsTaskOwnerOrIsAdminGuard)
-    @Patch()
+    @Patch('/:id')
     @ApiOperation({
         summary: 'update a task'
     })
-    updateTask(@Body() task: UpdateTaskDTO) {
-        return this.taskService.UpdateTask(task)
+    updateTask(@Body() task: UpdateTaskDTO,@Param('id',ParseIntPipe) taskId:number) {
+        return this.taskService.UpdateTask(taskId,task)
             .then((task) => {
                 return task;
             })

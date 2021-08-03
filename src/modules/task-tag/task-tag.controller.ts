@@ -35,9 +35,9 @@ export class TaskTagController {
     @ApiOperation({
         summary: 'update a task tag'
     })
-    @Patch()
-    updateTaskTag(@Body() updatedTag: UpdateTaskTagDTO) {
-        return this.taskTagService.updateTaskTag(updatedTag)
+    @Patch('/:id')
+    updateTaskTag(@Body() updatedTag: UpdateTaskTagDTO,@Param('id',ParseIntPipe) taskTagId:number ) {
+        return this.taskTagService.updateTaskTag(taskTagId,updatedTag)
             .then((tag) => {
                 return tag;
             })

@@ -26,8 +26,8 @@ export class ProjectService {
         return await this.projectRepository.save(project);
     }
 
-    async updateProject(updatedProject: UpdateProjectDTO) {
-        let originalProject: Project = await this.projectRepository.findOne(updatedProject.id);
+    async updateProject(id:number,updatedProject: UpdateProjectDTO) {
+        let originalProject: Project = await this.projectRepository.findOne(id);
 
         let projectToInsert: Project = { ...originalProject, ...updatedProject };
         return await this.projectRepository.save(projectToInsert);
